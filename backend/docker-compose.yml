@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: .
+    container_name: backend_api
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - network_api
+
+  web:
+    image: nginx:latest
+    container_name: backend_web
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+    networks:
+      - network_api
+
+  db:
+    image: mysql:8
+    container_name: laravel_db
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    ports:
+      - "33060:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - network_api
+
+volumes:
+  dbdata:
+    driver: local
+
+networks:
+  network_api:
+    driver: bridge
