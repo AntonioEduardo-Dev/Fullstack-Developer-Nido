@@ -15,11 +15,10 @@ class WordFavoriteService
 
     public function makeUserFavorite(int $userId, string $word)
     {
-        $word = $this->wordRepository->findByColumns(["word", $word]);
-
+        $wordData = $this->wordRepository->findByColumns(["word" => $word]);
         return $this->wordFavorityRepository->updateOrCreate([
             'user_id' => $userId,
-            'word_id' => $word['id']
+            'word_id' => $wordData['id']
         ]);
     }
 }
