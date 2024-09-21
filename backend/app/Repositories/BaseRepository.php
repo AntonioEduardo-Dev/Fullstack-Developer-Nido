@@ -188,4 +188,15 @@ abstract class BaseRepository implements RepositoryInterface
    public function firstOrNew(array $columns): Model {
        return $this->model->firstOrNew($columns);
    }
+
+    /**
+     * pagina com valores especificados.
+     *
+     * @param int $int perPage.
+     * @param string $string cursor.
+     * @return Collection Uma coleção contendo todos os modelos.
+     */
+   public function cursorPaginate(int $perPage, string $cursor): Collection {
+       return $this->model->cursorPaginate($perPage, ['*'], 'cursor', $cursor);
+   }
 }

@@ -80,4 +80,13 @@ interface RepositoryInterface
      * @return bool Retorna true se a exclusão foi bem-sucedida, false caso contrário.
      */
     public function delete(int $id): bool;
+
+    /**
+     * pagina com valores especificados.
+     *
+     * @param int $int perPage.
+     * @param string $string cursor.
+     * @return Collection Uma coleção contendo todos os modelos.
+     */
+    public function cursorPaginate(int $perPage, string $cursor): Collection;
 }
