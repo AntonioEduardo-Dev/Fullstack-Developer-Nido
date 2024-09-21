@@ -3,7 +3,6 @@
 namespace App\Services\Api;
 
 use App\Repositories\Api\WordRepository;
-use Illuminate\Contracts\Pagination\CursorPaginator;
 
 class WordService
 {
