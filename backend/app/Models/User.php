@@ -48,4 +48,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(WordFavorite::class, 'user_id');
+    }
+
+    public function history()
+    {
+        return $this->hasMany(WordHistory::class, 'user_id');
+    }
 }

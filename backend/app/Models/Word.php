@@ -19,4 +19,14 @@ class Word extends Model
     protected $fillable = [
         'word'
     ];
+
+    public function favorites()
+    {
+        return $this->hasMany(WordFavorite::class, 'word_id');
+    }
+
+    public function history()
+    {
+        return $this->hasMany(WordHistory::class, 'word_id');
+    }
 }
