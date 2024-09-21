@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\Api\WordRepository;
-use Illuminate\Support\Facades\Log;
 
 class WordService
 {
