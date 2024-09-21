@@ -84,9 +84,18 @@ interface RepositoryInterface
     /**
      * pagina com valores especificados.
      *
+     * @param string $string search.
      * @param int $int perPage.
      * @param string $string cursor.
      * @return Collection Uma coleção contendo todos os modelos.
      */
-    public function cursorPaginate(int $perPage, string $cursor): Collection;
+    public function cursorPaginate(?string $search = null, int $perPage, ?string $cursor = null);
+
+    /**
+     * pagina com valores especificados.
+     *
+     * @param string $string search.
+     * @return int quantidade de todos os modelos.
+     */
+    public function count(?string $search = null);
 }
