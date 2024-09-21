@@ -3,13 +3,32 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\Api\UserService;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    public function __construct(
+        protected UserService $userService
+    )
+    {}
+
     public function index()
     {
-        return response()->json(["message" => "Fullstack Challenge 🏅 - Dictionary"], 200);
+        $user = $this->userService->getAuthenticatedUser();
+        
+        // Verifique se há um usuário autenticado antes de tentar mapear
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não autenticado'], 401);
+        }
+    
+        return [
+            'name' => $user->name,
+            'email' => $user->email,
+            'token' => $user->token,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ];
     }
 
     public function history()
