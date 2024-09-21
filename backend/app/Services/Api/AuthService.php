@@ -39,6 +39,13 @@ class AuthService
             throw new ClientException('Unauthorized');
         }
 
-        return response()->json(['token' => $token], 200);
+        $user = JWTAuth::user();
+        $this->userRepository->update($user['id'], ["token" => $token]);
+        
+        return response()->json([
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'token' => "Bearer {$token}",
+        ], 200);
     }
 }
