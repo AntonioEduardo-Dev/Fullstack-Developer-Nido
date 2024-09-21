@@ -16,9 +16,9 @@ Route::post('/auth/signin', [AuthController::class, 'signIn']);
 
 Route::middleware('auth.jwt')->group(function () {
     Route::prefix('entries/en')->controller(EntryController::class)->group(function () {
-        Route::delete('/{word}/unfavorite', 'index');
-        Route::post('/{word}/favorite', 'index');
-        Route::get('/{word}', 'index');
+        Route::delete('/{word}/unfavorite', 'unfavorite');
+        Route::post('/{word}/favorite', 'favorite');
+        Route::get('/{word}', 'word');
         Route::get('/', 'index');
     });
 
