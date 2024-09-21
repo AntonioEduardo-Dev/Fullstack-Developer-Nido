@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\WordService;
+use App\Services\Api\WordService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
