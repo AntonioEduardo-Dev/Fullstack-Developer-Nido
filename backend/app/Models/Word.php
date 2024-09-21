@@ -11,6 +11,11 @@ class Word extends Model
 
     protected $table = 'words';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'word'
     ];
