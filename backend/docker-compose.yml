@@ -2,6 +2,7 @@ services:
   app:
     build:
       context: .
+      dockerfile: Dockerfile
     container_name: backend_api
     working_dir: /var/www/html
     volumes:
@@ -9,8 +10,8 @@ services:
     networks:
       - network_api
 
-  web:
-    image: nginx:latest
+  nginx:
+    image: nginx:alpine
     container_name: backend_web
     volumes:
       - ./:/var/www/html
@@ -23,24 +24,24 @@ services:
       - network_api
 
   db:
-    image: mysql:8
-    container_name: laravel_db
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: unless-stopped
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: secret
-    ports:
-      - "33060:3306"
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
     volumes:
-      - dbdata:/var/lib/mysql
+      - dbdata:/docker-entrypoint-initdb.d
     networks:
       - network_api
-
-volumes:
-  dbdata:
-    driver: local
+    ports:
+      - 33060:3306
 
 networks:
   network_api:
     driver: bridge
+
+volumes:
+  dbdata:
