@@ -7,7 +7,6 @@ use App\Models\Word;
 use App\Repositories\{
     BaseRepository
 };
-use Illuminate\Support\Facades\Log;
 
 /**
  * Repositorio para manipulação de dados de palavras da api.

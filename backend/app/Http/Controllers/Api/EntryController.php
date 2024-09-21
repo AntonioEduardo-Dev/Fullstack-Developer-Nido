@@ -11,7 +11,6 @@ use App\Services\Api\{
     WordHistoryService,
     WordService
 };
-use Illuminate\Support\Facades\Log;
 
 class EntryController extends Controller
 {
