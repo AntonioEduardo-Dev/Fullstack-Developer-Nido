@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthLoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -35,7 +36,7 @@ class AuthController extends Controller
         return response()->json(['token' => $token], 201);
     }
 
-    public function signIn(Request $request)
+    public function signIn(AuthLoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
 
