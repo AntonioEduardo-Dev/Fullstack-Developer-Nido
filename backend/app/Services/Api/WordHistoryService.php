@@ -30,4 +30,27 @@ class WordHistoryService
             'word_id' => $wordData['id']
         ]);
     }
+
+    public function getHistory(int $userId, $perPage, $cursor)
+    {
+        $query = $this->wordHistoryRepository->whereByColumns(["user_id" => $userId]);
+        $items = $this->wordHistoryRepository->cursorPaginate(null, $perPage, $cursor, $query);
+
+        // Conta todos os documentos na tabela, filtrando se necessário
+        $totalDocs = $this->wordHistoryRepository->count(null); 
+
+        return response()->json([
+            'results' => collect($items->items())->map(function($item) {
+                return [
+                    'word' => $item['word']['word'],
+                    'added' => $item['word']['created_at']
+                ]; // Use a propriedade correta se $item for um objeto
+            }),
+            'totalDocs' => $totalDocs,
+            'previous' => $items->previousCursor()?->encode(),
+            'next' => $items->nextCursor()?->encode(),
+            'hasNext' => $items->hasMorePages(),
+            'hasPrev' => !is_null($items->previousCursor())
+        ], 200);
+    }
 }
