@@ -13,13 +13,21 @@ class WordHistoryService
     )
     {}
 
-    public function makeUserFavorite(int $userId, string $word)
+    public function makeUserHistory(int $userId, string $word)
     {
-        $word = $this->wordRepository->findByColumns(["word", $word]);
-
+        $wordData = $this->wordRepository->findByColumns(["word" => $word]);
         return $this->wordHistoryRepository->updateOrCreate([
             'user_id' => $userId,
-            'word_id' => $word['id']
+            'word_id' => $wordData['id']
+        ]);
+    }
+
+    public function unMakeUserHistory(int $userId, string $word)
+    {
+        $wordData = $this->wordRepository->findByColumns(["word" => $word]);
+        return $this->wordHistoryRepository->deleteByColumns([
+            'user_id' => $userId,
+            'word_id' => $wordData['id']
         ]);
     }
 }
