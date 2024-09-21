@@ -21,4 +21,13 @@ class WordFavoriteService
             'word_id' => $wordData['id']
         ]);
     }
+
+    public function unMakeUserFavorite(int $userId, string $word)
+    {
+        $wordData = $this->wordRepository->findByColumns(["word" => $word]);
+        return $this->wordFavorityRepository->deleteByColumns([
+            'user_id' => $userId,
+            'word_id' => $wordData['id']
+        ]);
+    }
 }

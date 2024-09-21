@@ -53,5 +53,9 @@ class EntryController extends Controller
 
     public function unFavorite(string $word)
     {
+        $student = $this->userService->getAuthenticatedUser();
+        $response = $this->wordFavoriteService->unMakeUserFavorite((int) $student['id'], (string) $word);
+
+        return response()->json(['status' => !!$response]);
     }
 }
