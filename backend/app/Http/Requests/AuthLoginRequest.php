@@ -22,7 +22,8 @@ class AuthLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'email'     => 'required|email|max:255',
+            'password'  => 'required|string|min:4|max:30' // optei por facilitar o login o maximo possivel dentro da realidade
         ];
     }
 }
