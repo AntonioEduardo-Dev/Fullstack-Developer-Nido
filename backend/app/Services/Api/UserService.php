@@ -3,11 +3,10 @@
 namespace App\Services\Api;
 
 use App\Exceptions\ClientException;
-use App\Repositories\Api\WordRepository;
 
 class UserService
 {
-    public function __construct(protected WordRepository $wordRepository)
+    public function __construct()
     {}
     
     public function getAuthenticatedUser()
