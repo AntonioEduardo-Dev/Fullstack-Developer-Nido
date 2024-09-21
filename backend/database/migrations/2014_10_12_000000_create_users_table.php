@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->text('token')->comment('Bearer token, referente a autenticação da API');
+            $table->text('token')->nullable()->comment('Bearer token, referente a autenticação da API');
             $table->rememberToken();
             $table->timestamps();
         });
