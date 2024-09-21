@@ -2,8 +2,11 @@
 
 namespace App\Interfaces;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{
+    Builder,
+    Model,
+    Collection
+};
 
 interface RepositoryInterface 
 {
@@ -98,4 +101,20 @@ interface RepositoryInterface
      * @return int quantidade de todos os modelos.
      */
     public function count(?string $search = null);
+
+    /**
+     * Encontra um modelo pela colunas e valores especificados.
+     *
+     * @param array $columns valores e colunas de dados.
+     * @return Collection Uma coleção contendo todos os modelos.
+     */
+    public function getByColumns(array $columns): Collection;
+    
+    /**
+     * Encontra modelos pela colunas e valores especificados.
+     *
+     * @param array $columns valores e colunas de dados.
+     * @return Builder um builder.
+     */
+    public function whereByColumns(array $columns): Builder;
 }

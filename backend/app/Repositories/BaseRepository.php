@@ -107,6 +107,23 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
+     * Encontra modelos pela colunas e valores especificados.
+     *
+     * @param array $columns valores e colunas de dados.
+     * @return Builder um builder.
+     */
+    public function whereByColumns(array $columns): Builder
+    {
+        $query = $this->model;
+        if ($columns) {
+            foreach ($columns as $column => $value) {
+                $query = $query->where($column, $value);
+            }
+        }
+        return $query;
+    }
+
+    /**
      * Obtém todos os modelos.
      *
      * @return Collection Uma coleção contendo todos os modelos.
@@ -212,9 +229,11 @@ abstract class BaseRepository implements RepositoryInterface
      * @param string $string cursor.
      * @return Collection Uma coleção contendo todos os modelos.
      */
-    public function cursorPaginate(?string $search = null, int $perPage, ?string $cursor = null)
+    public function cursorPaginate(?string $search = null, int $perPage, ?string $cursor = null, $query = null)
     {
-        $query = $this->model; // Começa com o modelo
+        if(!$query){
+            $query = $this->model; // Começa com o modelo
+        }
 
         if ($search) {
             $query = $query->where("word", 'LIKE', "%$search%"); // Aplica o filtro de busca
