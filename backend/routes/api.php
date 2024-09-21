@@ -23,8 +23,8 @@ Route::middleware('api_jwt')->group(function () {
     });
 
     Route::prefix('user/me')->controller(UserController::class)->group(function () {
-        Route::get('/favorites', 'index');
-        Route::get('/history', 'index');
+        Route::get('/favorites', 'favorites');
+        Route::get('/history', 'history');
         Route::get('/', 'index');
     });
 });
