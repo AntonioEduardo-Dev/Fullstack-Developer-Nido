@@ -3,7 +3,7 @@ import { NavProps } from "../../interface/navInterface";
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import { IoBookmarks } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const Nav: React.FC<NavProps> = () => {
@@ -12,7 +12,8 @@ const Nav: React.FC<NavProps> = () => {
   const [menuClass, setMenuClass] = useState("");
   const [iconName, setIconName] = useState("menu");
   const token = localStorage.getItem('authToken');
-
+  const location = useLocation();
+  
   const toggleMenu = () => {
     setIconName(iconName === "menu" ? "close" : "menu");
     setMenuClass(menuClass ? "" : "top-[7%]");
@@ -25,6 +26,10 @@ const Nav: React.FC<NavProps> = () => {
 
   const login = () => {
     navigate("/entrar"); // Redireciona para a home após login bem-sucedido
+  };
+
+  const signUp = () => {
+    navigate("/cadastre-se"); // Redireciona para a home após login bem-sucedido
   };
 
   return (
@@ -44,8 +49,8 @@ const Nav: React.FC<NavProps> = () => {
       </div>
       <div className="flex items-center gap-6">
         <button className="bg-[#a6c1ee] text-white px-5 py-2 rounded-full hover:bg-[#87acec]"
-            onClick={ !!token ? logOut : login}>
-          { !!token ? "Sair" : "Entrar"}
+            onClick={ !!token ? logOut : (location && location.pathname === "/entrar" ? signUp : login)}>
+          { !!token ? "Sair" : (location && location.pathname === "/entrar" ? "Cadastre-se" : "Entrar") }
         </button>
         <div>
           {iconName === "menu" ? (
