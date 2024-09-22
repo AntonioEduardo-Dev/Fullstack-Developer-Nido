@@ -7,6 +7,38 @@ use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/",
+     *     summary="Retorna mensagem de boas-vindas",
+     *     description="Retorna uma mensagem simples para indicar que a API está funcionando corretamente.",
+     *     operationId="getWelcomeMessage",
+     *     tags={"Home"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mensagem de boas-vindas",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Fullstack Challenge 🏅 - Dictionary")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de cliente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Erro de cliente.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro de servidor",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Ocorreu um erro inesperado, tente novamente mais tarde.")
+     *         )
+     *     )
+     * )
+     */
     public function index()
     {
         try {
