@@ -102,9 +102,8 @@ class EntryController extends Controller
     {
         try {
             $student = $this->userService->getAuthenticatedUser();
-            $response = $this->wordFavoriteService->makeUserFavorite((int) $student['id'], (string) $word);
-    
-            return response()->json(['status' => !!$response]);
+            $this->wordFavoriteService->makeUserFavorite((int) $student['id'], (string) $word);
+            return response()->json([], 204);
         } catch (\App\Exceptions\ClientException $e) {
             // Trata exceções relacionadas a erros do cliente
             return $e->render();
@@ -133,9 +132,9 @@ class EntryController extends Controller
     {
         try {
             $student = $this->userService->getAuthenticatedUser();
-            $response = $this->wordFavoriteService->unMakeUserFavorite((int) $student['id'], (string) $word);
+            $this->wordFavoriteService->unMakeUserFavorite((int) $student['id'], (string) $word);
     
-            return response()->json(['status' => !!$response]);
+            return response()->json([], 204);
         } catch (\App\Exceptions\ClientException $e) {
             // Trata exceções relacionadas a erros do cliente
             return $e->render();
