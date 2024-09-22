@@ -12,27 +12,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
 
   const login = async (email: string, password: string): Promise<void> => {
-    try {
-      const response = await api.post('/auth/signin', { email, password });
-      const { token, expiration } = response.data;
+    const response = await api.post('/auth/signin', { email, password });
+    const { token } = response.data;
 
-      localStorage.setItem('authToken', token);
-      localStorage.setItem('tokenExpiration', expiration.toString());
+    localStorage.setItem('authToken', token);
 
-      setUser(response.data.user);
-      setToken(token);
+    setUser(response.data.user);
+    setToken(token);
 
-      api.defaults.headers.common['Authorization'] = `${token}`;
-    } catch (err : any) {
-      console.error(err.message || 'Erro ao fazer login');
-    }
+    api.defaults.headers.common['Authorization'] = `${token}`;
   };
 
   const logout = () => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('authToken');
-    localStorage.removeItem('tokenExpiration');
     delete api.defaults.headers.common['Authorization'];
   };
 
