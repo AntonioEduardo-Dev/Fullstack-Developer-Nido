@@ -10,13 +10,6 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const token = localStorage.getItem('authToken');
-
-  useEffect(() => {
-    if(!!token){
-      navigate("/");
-    }
-  }, []);
 
   const onSubmit = async () => {
     try {
