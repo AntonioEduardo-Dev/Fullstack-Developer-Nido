@@ -7,7 +7,7 @@ const apiUtils = async (url : string, method : string, body : {}) => {
     
     switch (method.toLowerCase()) {
       case 'get':
-        response = await api.get(url);
+        response = await api.get(url, { params: body });
         break;
       case 'post':
         response = await api.post(url, body);
