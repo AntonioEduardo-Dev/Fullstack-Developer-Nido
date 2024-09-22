@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../components/button";
 import apiUtils from "../../utils/apiUtils";
 import { useLocation } from "react-router-dom";
-
-interface Word {
-  word: string;
-  phonetic?: string;
-  phonetics: { audio: string }[];
-  meanings?: any;
-}
+import { Word } from "../../interface/WordInterface";
 
 const Home = () => {
   const location = useLocation();
