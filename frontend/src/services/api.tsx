@@ -14,15 +14,6 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
-    const expiration = localStorage.getItem('tokenExpiration');
-
-    // Verifica se o token está expirado
-    if (expiration && new Date().getTime() > parseInt(expiration, 10)) {
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('tokenExpiration');
-
-      return Promise.reject(new Error('Credenciais expiradas.'));
-    }
 
     if (token) {
       config.headers.Authorization = `${token}`;
