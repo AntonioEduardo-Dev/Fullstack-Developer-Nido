@@ -24,6 +24,67 @@ class EntryController extends Controller
     )
     {}
 
+    /**
+     * @OA\Get(
+     *     path="/entries/en",
+     *     summary="Lista dados com paginação usando cursores",
+     *     description="Retorna uma lista de palavras com suporte à paginação via cursores e uma busca opcional por palavras.",
+     *     operationId="getEntries",
+     *     tags={"Entries"},
+     *     @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Número de itens por página (padrão: 10)",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\Parameter(
+     *         name="cursor",
+     *         in="query",
+     *         description="Cursor para paginação",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Palavra ou termo a ser buscado",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de palavras paginada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="results", type="array", @OA\Items(type="string", example="apple")),
+     *             @OA\Property(property="totalDocs", type="integer", example=100),
+     *             @OA\Property(property="previous", type="string", nullable=true, example="eyJpdiI6IjM0"),
+     *             @OA\Property(property="next", type="string", nullable=true, example="eyJpdiI6IjU2"),
+     *             @OA\Property(property="hasNext", type="boolean", example=true),
+     *             @OA\Property(property="hasPrev", type="boolean", example=false)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de cliente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Erro de cliente.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro de servidor",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Ocorreu um erro inesperado, tente novamente mais tarde.")
+     *         )
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     */
     public function index(SearchRequest $request)
     {
         try {
@@ -59,6 +120,49 @@ class EntryController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/entries/en/{word}",
+     *     summary="Busca informações sobre uma palavra",
+     *     description="Permite que o usuário autenticado adicione uma palavra ao seu histórico e busque informações dessa palavra.",
+     *     operationId="getWordInfo",
+     *     tags={"Entries"},
+     *     @OA\Parameter(
+     *         name="word",
+     *         in="path",
+     *         description="A palavra para buscar informações",
+     *         required=true,
+     *         @OA\Schema(type="string", example="apple")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Informações da palavra obtidas com sucesso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="response", type="array", @OA\Items(type="object"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de cliente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Erro de cliente.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro de servidor",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Ocorreu um erro inesperado, tente novamente mais tarde.")
+     *         )
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     */
     public function word(string $word)
     {
         try {
@@ -98,6 +202,45 @@ class EntryController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/entries/en/{word}/favorite",
+     *     summary="Marca uma palavra como favorita para o usuário autenticado",
+     *     description="Permite que o usuário autenticado marque uma palavra como favorita.",
+     *     operationId="favoriteWord",
+     *     tags={"Entries"},
+     *     @OA\Parameter(
+     *         name="word",
+     *         in="path",
+     *         description="A palavra a ser marcada como favorita",
+     *         required=true,
+     *         @OA\Schema(type="string", example="apple")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Palavra marcada como favorita com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de cliente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Erro de cliente.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro de servidor",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Ocorreu um erro inesperado, tente novamente mais tarde.")
+     *         )
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     */
     public function favorite(string $word)
     {
         try {
@@ -128,6 +271,45 @@ class EntryController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/entries/en/{word}/unfavorite",
+     *     summary="Remove uma palavra dos favoritos do usuário autenticado",
+     *     description="Permite que o usuário autenticado remova uma palavra dos seus favoritos.",
+     *     operationId="unfavoriteWord",
+     *     tags={"Entries"},
+     *     @OA\Parameter(
+     *         name="word",
+     *         in="path",
+     *         description="A palavra a ser removida dos favoritos",
+     *         required=true,
+     *         @OA\Schema(type="string", example="apple")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Palavra removida dos favoritos com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de cliente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Erro de cliente.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erro de servidor",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Ocorreu um erro inesperado, tente novamente mais tarde.")
+     *         )
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     }
+     * )
+     */
     public function unFavorite(string $word)
     {
         try {
