@@ -3,12 +3,10 @@ import Login from '../views/Auth/login';
 import Register from '../views/Auth/register';
 import Home from '../views/home';
 import ProtectedRoute from './ProtectedRoute';
-import { useState } from 'react';
 import LayoutDefault from '../layout/_layout';
 
 const AppRoutes = () => {
-  const [user, setUser] = useState(null); // Definindo o estado do usuário
-
+  const token = localStorage.getItem('authToken');
   return (
     <Router>
       <LayoutDefault>
@@ -18,7 +16,7 @@ const AppRoutes = () => {
           <Route 
             path="/" 
             element={
-              <ProtectedRoute isAuthenticated={!!user}>
+              <ProtectedRoute isAuthenticated={!!token}>
                 <Home />
               </ProtectedRoute>
             } 
