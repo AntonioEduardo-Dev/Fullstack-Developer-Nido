@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,5 +27,20 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * Manipula exceções de validação para retornar código 400.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Validation\ValidationException $exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json([
+            'message' => 'Erro de validação',
+            'errors' => $exception->errors(),
+        ], 400); // Aqui definimos o código 400 ao invés de 422
     }
 }
