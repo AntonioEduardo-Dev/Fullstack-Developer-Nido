@@ -1,7 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { NavProps } from "../../interface/navInterface";
-import { IoMenu } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
 import { IoBookmarks } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -9,15 +7,8 @@ import { AuthContext } from "../../context/AuthContext";
 const Nav: React.FC<NavProps> = () => {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
-  const [menuClass, setMenuClass] = useState("");
-  const [iconName, setIconName] = useState("menu");
   const token = localStorage.getItem('authToken');
   const location = useLocation();
-  
-  const toggleMenu = () => {
-    setIconName(iconName === "menu" ? "close" : "menu");
-    setMenuClass(menuClass ? "" : "top-[7%]");
-  };
 
   const logOut = () => {
     logout();
@@ -38,7 +29,7 @@ const Nav: React.FC<NavProps> = () => {
         <IoBookmarks className="cursor-pointer" size={36} color="#fbc2eb" />
       </div>
       <div
-        className={`nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[100vh] left-0 top-[-100%] md:w-auto z-10 w-full flex items-center px-5 ${menuClass}`}>
+        className={`nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[100vh] left-0 top-[-100%] md:w-auto z-10 w-full flex items-center px-5`}>
         <ul className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
           <li>
             <a className="hover:text-gray-500" href="#">
@@ -52,21 +43,6 @@ const Nav: React.FC<NavProps> = () => {
             onClick={ !!token ? logOut : (location && location.pathname === "/entrar" ? signUp : login)}>
           { !!token ? "Sair" : (location && location.pathname === "/entrar" ? "Cadastre-se" : "Entrar") }
         </button>
-        <div>
-          {iconName === "menu" ? (
-            <IoMenu
-              className="cursor-pointer md:hidden"
-              onClick={toggleMenu}
-              size={32}
-            />
-          ) : (
-            <IoClose
-              className="cursor-pointer md:hidden"
-              onClick={toggleMenu}
-              size={32}
-            />
-          )}
-        </div>
       </div>
     </nav>
   );
