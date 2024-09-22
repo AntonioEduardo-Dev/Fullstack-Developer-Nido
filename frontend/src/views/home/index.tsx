@@ -38,18 +38,23 @@ const Home = () => {
 
   const currentWord = word[currentIndex];
 
-  const loadData = async (endpoint: string, setter: any, data: any, post: {}) => {
-    if (data.length === 0) {
-      try {
-        const response = await apiUtils(endpoint, 'get', post);
-        console.log(response);
-        
-        if (response && response.results) {
-          setter(response.results);
-        }
-      } catch (error) {
-        console.log(error);
+  const loadData = async (endpoint: string, setter: any, post: {}) => {
+    try {
+      const response = await apiUtils(endpoint, 'get', post);
+      if (response && response.results) {
+        setter(response.results);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const favorite = async (endpoint: string, method: string, body: {}, text: string) => {
+    try {
+      await apiUtils(endpoint, method, body);
+      alert(`${text} como favorito.`);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -58,7 +63,6 @@ const Home = () => {
       try {
         const response = await apiUtils(`/entries/en/${word}`, 'get', {});
         if (response && response.response) {
-          console.log(response.response);
           setWord(response.response)
         }
       } catch (error) {
@@ -67,16 +71,26 @@ const Home = () => {
     }
   };
 
+  const unMarkFavorite = () => {
+    const word = currentWord.word;
+    favorite(`/entries/en/${word}/unfavorite`, 'delete', {}, "Desmarcado");
+  };
+  
+  const markFavorite = () => {
+    const word = currentWord.word;
+    favorite(`/entries/en/${word}/favorite`, 'post', {}, "Marcado");
+  };
+
   useEffect(() => {
     switch (activeTabIndex) {
       case 0:
-        loadData('/entries/en', setWords, words, { limit, search, cursor });
+        loadData('/entries/en', setWords, { limit, search, cursor });
         break;
       case 1:
-        loadData('/user/me/history', setHistory, history, { limit, search, cursor });
+        loadData('/user/me/history', setHistory, { limit, search, cursor });
         break;
       case 2:
-        loadData('/user/me/favorites', setFavorites, favorites, { limit, search, cursor });
+        loadData('/user/me/favorites', setFavorites, { limit, search, cursor });
         break;
       default:
         break;
@@ -126,8 +140,8 @@ const Home = () => {
                 <Button title="Proximo" onClick={handleNext} disabled={currentIndex === word.length - 1} />
               </div>
               <div className="min-w-72 flex flex-row justify-center items-center gap-4">
-                <Button title={true ? "Favoritar" : "Desfavoritar"} disabled={false} />
-                <Button title={true ? "Desfavoritar" : "Favoritar"} disabled={false} />
+                <Button title={true ? "Favoritar" : "Desfavoritar"} onClick={markFavorite} disabled={false} />
+                <Button title={true ? "Desfavoritar" : "Favoritar"} onClick={unMarkFavorite} disabled={false} />
               </div>
             </>
           ) : (
