@@ -6,7 +6,7 @@ use Exception;
 
 class ServerException extends Exception
 {
-    public function __construct($message = "Erro interno no servidor", $code = 500)
+    public function __construct($message = "Ocorreu um erro inesperado, tente novamente mais tarde.", $code = 500)
     {
         parent::__construct($message, $code);
     }

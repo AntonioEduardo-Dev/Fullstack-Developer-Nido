@@ -11,7 +11,7 @@ class ClientException extends Exception
     //
     public function __construct($message = "Solicitação invalida", $code = 400, $messageClient = null)
     {
-        parent::__construct($message, $code);
+        parent::__construct($message, 400);
         $this->messageClient = $messageClient ?? $message;
     }
 
