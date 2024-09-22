@@ -25,7 +25,7 @@ class UserController extends Controller
      *     path="/user/me",
      *     summary="Obtém informações do usuário autenticado",
      *     operationId="getUserInfo",
-     *     tags={"User"},
+     *     tags={"/user/me"},
      *     @OA\Response(
      *         response=200,
      *         description="Informações do usuário obtidas com sucesso",
@@ -104,7 +104,7 @@ class UserController extends Controller
      *     path="/user/me/history",
      *     summary="Obtém o histórico de palavras do usuário autenticado",
      *     operationId="getUserHistory",
-     *     tags={"User"},
+     *     tags={"/user/me"},
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
@@ -190,7 +190,7 @@ class UserController extends Controller
      *     path="/user/me/favorites",
      *     summary="Obtém as palavras favoritas do usuário autenticado",
      *     operationId="getUserFavorites",
-     *     tags={"User"},
+     *     tags={"/user/me"},
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",

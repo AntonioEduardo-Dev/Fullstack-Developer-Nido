@@ -30,7 +30,7 @@ class EntryController extends Controller
      *     summary="Lista dados com paginação usando cursores",
      *     description="Retorna uma lista de palavras com suporte à paginação via cursores e uma busca opcional por palavras.",
      *     operationId="getEntries",
-     *     tags={"Entries"},
+     *     tags={"/entries/en"},
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
@@ -126,7 +126,7 @@ class EntryController extends Controller
      *     summary="Busca informações sobre uma palavra",
      *     description="Permite que o usuário autenticado adicione uma palavra ao seu histórico e busque informações dessa palavra.",
      *     operationId="getWordInfo",
-     *     tags={"Entries"},
+     *     tags={"/entries/en"},
      *     @OA\Parameter(
      *         name="word",
      *         in="path",
@@ -208,7 +208,7 @@ class EntryController extends Controller
      *     summary="Marca uma palavra como favorita para o usuário autenticado",
      *     description="Permite que o usuário autenticado marque uma palavra como favorita.",
      *     operationId="favoriteWord",
-     *     tags={"Entries"},
+     *     tags={"/entries/en"},
      *     @OA\Parameter(
      *         name="word",
      *         in="path",
@@ -277,7 +277,7 @@ class EntryController extends Controller
      *     summary="Remove uma palavra dos favoritos do usuário autenticado",
      *     description="Permite que o usuário autenticado remova uma palavra dos seus favoritos.",
      *     operationId="unfavoriteWord",
-     *     tags={"Entries"},
+     *     tags={"/entries/en"},
      *     @OA\Parameter(
      *         name="word",
      *         in="path",

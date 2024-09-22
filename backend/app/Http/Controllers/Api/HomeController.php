@@ -13,7 +13,7 @@ class HomeController extends Controller
      *     summary="Retorna mensagem de boas-vindas",
      *     description="Retorna uma mensagem simples para indicar que a API está funcionando corretamente.",
      *     operationId="getWelcomeMessage",
-     *     tags={"Home"},
+     *     tags={"/"},
      *     @OA\Response(
      *         response=200,
      *         description="Mensagem de boas-vindas",

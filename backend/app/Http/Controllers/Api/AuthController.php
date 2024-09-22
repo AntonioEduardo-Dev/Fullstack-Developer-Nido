@@ -21,7 +21,7 @@ class AuthController extends Controller
      *     summary="Registro de novo usuário",
      *     description="Registra um novo usuário no sistema e retorna um token JWT.",
      *     operationId="registerUser",
-     *     tags={"Autenticação"},
+     *     tags={"/auth"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Dados do usuário para registro",
@@ -93,7 +93,7 @@ class AuthController extends Controller
      *     summary="Login de usuário",
      *     description="Autentica o usuário e retorna um token JWT.",
      *     operationId="loginUser",
-     *     tags={"Autenticação"},
+     *     tags={"/auth"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Dados de login do usuário",
