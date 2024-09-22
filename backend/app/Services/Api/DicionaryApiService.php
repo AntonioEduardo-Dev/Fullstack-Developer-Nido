@@ -11,6 +11,7 @@ class DicionaryApiService
 
     public function getAllItems($word)
     {
-        return $this->cURLRepository->getAllItems('GET', "https://api.dictionaryapi.dev/api/v2/entries/en/{$word}");
+        $encodedWord = urlencode($word);
+        return $this->cURLRepository->getAllItems('GET', "https://api.dictionaryapi.dev/api/v2/entries/en/{$encodedWord}");
     }
 }
