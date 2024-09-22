@@ -36,7 +36,7 @@ class AuthService
     public function signIn($credentials)
     {
         if (!$token = JWTAuth::attempt($credentials)) {
-            throw new ClientException('Unauthorized');
+            throw new ClientException('Unauthorized', 400, 'As credenciais informadas estão incorretas');
         }
 
         $user = JWTAuth::user();
