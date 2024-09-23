@@ -54,7 +54,7 @@ const Register = () => {
       <div className="md:w-[500px] w-full md:h-auto h-full bg-white flex flex-col md:justify-center justify-start items-center rounded-none md:rounded-2xl py-12 Z-0">
         <span className="font-semibold text-3xl mb-6">Cadastre-se</span>
         {errorMessage.length > 0 && (
-          <ul className="error mb-6 bg-indigo-400 py-2 px-3 md:rounded-2xl text-white">
+          <ul className="error mb-6 bg-red-400 py-1 px-2 rounded-lg text-white">
             {errorMessage.map((error, index) => (
               <li key={index}>{error}</li>
             ))}
