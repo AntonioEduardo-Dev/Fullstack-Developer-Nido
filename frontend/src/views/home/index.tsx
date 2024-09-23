@@ -191,7 +191,10 @@ const Home = () => {
                 <span className="font-semibold text-lg">{currentWord.phonetic ?? 'N/A'}</span>
               </div>              
               {currentWord.phonetics && currentWord.phonetics.length > 0 && (
-                <audio controls className="mt-5">
+                <audio 
+                  key={currentWord.phonetics[0]?.audio || currentWord.phonetics[1]?.audio || currentWord.phonetics[2]?.audio || ""}
+                  controls 
+                  className="mt-5">
                   <source                    
                     src={
                       currentWord.phonetics[0]?.audio ||

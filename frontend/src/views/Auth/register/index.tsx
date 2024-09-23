@@ -38,7 +38,7 @@ const Register = () => {
 
         setTimeout(() => {
           navigate("/");
-        }, (3 * 1000) );
+        }, (1.5 * 1000) );
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
