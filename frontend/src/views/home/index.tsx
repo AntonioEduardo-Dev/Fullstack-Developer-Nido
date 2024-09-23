@@ -14,7 +14,7 @@ const Home = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const search = queryParams.get("search") || "";
-  const limit = queryParams.get("limit") || "25"; // valor padrão
+  const limit = queryParams.get("limit") || "20"; // valor padrão
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [word, setWord] = useState<Word[]>([]);
@@ -27,6 +27,7 @@ const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentCursor, setCurrentCursor] = useState("");
   const [loading, setLoading] = useState(false);
+  let currentWord = word[currentIndex];
 
   const handleNext = () => {
     if (currentIndex < word.length - 1) {
@@ -40,15 +41,22 @@ const Home = () => {
     }
   };
 
-  const loadData = async (endpoint: string, setter: any, post: PostData) => {
+  const loadData = async (endpoint: string, setter: any, post: PostData, load = false) => {
     try {
       if(!!post.cursor){
         setCurrentCursor(post.cursor);
       }
+      if(!!load){
+        post.cursor = "";
+      }
       const response = await apiUtils(endpoint, 'get', post);
       
       if (response && response.results) {
-        setter((prev: any) => [...prev, ...response.results]);
+        if(load){
+          setter(response.results);
+        }else{
+          setter((prev: any) => [...prev, ...response.results]);
+        }
         return response;
       }
     } catch (error) {
@@ -104,6 +112,7 @@ const Home = () => {
         const response = await apiUtils(`/entries/en/${word}`, 'get', {});
         if (response && response.response) {
           setWord(response.response);
+          setCurrentIndex(0);
         }
       } catch (error) {
         console.log(error);
@@ -134,19 +143,34 @@ const Home = () => {
     }
   };
 
+  const loadTab = async (value: number) => {
+    let cursorResponse = null;
+    if(value === 0){
+      cursorResponse = await loadData('/entries/en', setWords, { limit, search, cursor: cursorWords }, true);
+      if(!!cursorResponse.hasNext){
+        setCursorWords(cursorResponse.next);
+      }
+    }
+    if(value === 1){
+      cursorResponse = await loadData('/user/me/history', setHistory, { limit, search, cursor: cursorHistory }, true);
+      if(!!cursorResponse.hasNext){
+        setCursorHistory(cursorResponse.next);
+      }
+    }
+    if(value === 2){
+      cursorResponse = await loadData('/user/me/favorites', setFavorites, { limit, search, cursor: cursorFavorites }, true);
+      if(!!cursorResponse.hasNext){
+        setCursorFavorites(cursorResponse.next);
+      }
+    }
+    setActiveTabIndex(value)
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const newCursorWords = await loadData('/entries/en', setWords, { limit, search, cursor: cursorWords });
+      const newCursorWords = await loadData('/entries/en', setWords, { limit, search, cursor: cursorWords }, true);
       if(!!newCursorWords.hasNext){
         setCursorWords(newCursorWords.next);
-      }
-      const newCursorHistory = await loadData('/user/me/history', setHistory, { limit, search, cursor: cursorHistory });
-      if(!!newCursorHistory.hasNext){
-        setCursorHistory(newCursorHistory.next);
-      }
-      const newCursorFavorites = await loadData('/user/me/favorites', setFavorites, { limit, search, cursor: cursorFavorites });
-      if(!!newCursorFavorites.hasNext){
-        setCursorFavorites(newCursorFavorites.next);
       }
     };
   
@@ -157,22 +181,27 @@ const Home = () => {
     <div className="md:h-[90vh] sm:h-[100vh] flex justify-center items-center flex-1 z-0 p-5">
       <div className="md:h-auto sm:h-[100vh] grid lg:grid-cols-2 grid-cols-1 gap-4 bg-white rounded-lg sm:rounded-2xl py-14 px-6">
         <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
-          {word.length > 0 ? (
+          {currentWord ? (
             <>
               <div className="min-w-72 min-h-32 rounded-xl border-2 border-gray-400 flex flex-col justify-center items-center gap-4">
-                <span className="font-bold text-lg">{word[0].word ?? ""}</span>
-                <span className="font-semibold text-lg">{word[0].phonetic ?? 'N/A'}</span>
-              </div>
-              {word[0].phonetics.length > 0 && (
+                <span className="font-bold text-lg">{currentWord.word ?? ""}</span>
+                <span className="font-semibold text-lg">{currentWord.phonetic ?? 'N/A'}</span>
+              </div>              
+              {currentWord.phonetics && currentWord.phonetics.length > 0 && (
                 <audio controls className="mt-5">
-                  <source
-                    src={word[0].phonetics[0]?.audio || ""}
+                  <source                    
+                    src={
+                      currentWord.phonetics[0]?.audio ||
+                      currentWord.phonetics[1]?.audio ||
+                      currentWord.phonetics[2]?.audio ||
+                      ""
+                    }
                     type="audio/mpeg" />
                 </audio>
               )}
               <div className="max-w-72 min-w-72 min-h-20 max-h-48 mb-6 overflow-y-auto">
                 <span className="p-4">
-                  {word[0].meanings.map((meaning: any, index: string) => (
+                  {currentWord.meanings.map((meaning: any, index: string) => (
                     <div key={index}>
                       <strong>{meaning.partOfSpeech}</strong>
                       <ul>
@@ -204,17 +233,17 @@ const Home = () => {
           <div className="min-w-full min-h-10 flex justify-center items-center gap-4 p-2">
             <button
               className={`${0 === activeTabIndex ? "bg-blue-600" : "bg-blue-500"} py-2 px-4 rounded-lg text-white font-semibold text-xs`}
-              onClick={() => setActiveTabIndex(0)}>
+              onClick={() => loadTab(0)}>
               Word list
             </button>
             <button
               className={`${1 === activeTabIndex ? "bg-blue-600" : "bg-blue-500"} py-2 px-4 rounded-lg text-white font-semibold text-xs`}
-              onClick={() => setActiveTabIndex(1)}>
+              onClick={() => loadTab(1)}>
               History
             </button>
             <button
               className={`${2 === activeTabIndex ? "bg-blue-600" : "bg-blue-500"} py-2 px-4 rounded-lg text-white font-semibold text-xs`}
-              onClick={() => setActiveTabIndex(2)}>
+              onClick={() => loadTab(2)}>
               Favorites
             </button>
           </div>
@@ -222,7 +251,7 @@ const Home = () => {
             <div id="words"
               className={`md:w-96 w-full h-full border-2 mt-6 p-4 rounded-lg border-gray-400 grid grid-cols-4 gap-1 
               ${0 === activeTabIndex ? '' : 'hidden'}`}
-              style={{ maxHeight: '400px', overflowY: 'auto' }}
+              style={{ maxHeight: '200px', overflowY: 'auto' }}
               onScroll={handleScroll}>
               {words.map((word, index) => (
                 <span key={index} className="w-13 h-10 py-2 px-1 border-[1px] border-b-2 rounded-md border-gray-400 
@@ -235,7 +264,7 @@ const Home = () => {
             <div id="history"
               className={`md:w-96 w-full h-full border-2 mt-6 p-4 rounded-lg border-gray-400 grid grid-cols-4 gap-1 
               ${1 === activeTabIndex ? '' : 'hidden'}`}
-              style={{ maxHeight: '400px', overflowY: 'auto' }}
+              style={{ maxHeight: '200px', overflowY: 'auto' }}
               onScroll={handleScroll}>
               {history.map((element: any, index) => (
                 <span key={index} className="w-13 h-10 py-2 px-1 border-[1px] border-b-2 rounded-md border-gray-400 
@@ -248,7 +277,7 @@ const Home = () => {
             <div id="favorites"
               className={`md:w-96 w-full h-full border-2 mt-6 p-4 rounded-lg border-gray-400 grid grid-cols-4 gap-1 
               ${2 === activeTabIndex ? '' : 'hidden'}`}
-              style={{ maxHeight: '400px', overflowY: 'auto' }}
+              style={{ maxHeight: '200px', overflowY: 'auto' }}
               onScroll={handleScroll}>
               {favorites.map((element: any, index) => (
                 <span key={index} className="w-13 h-10 py-2 px-1 border-[1px] border-b-2 rounded-md border-gray-400 
