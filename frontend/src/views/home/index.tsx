@@ -29,6 +29,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [loadingWord, setLoadingWord] = useState(false);
   let currentWord = word[currentIndex];
+  const [query, setQuery] = useState('');
 
   const handleNext = () => {
     if (currentIndex < word.length - 1) {
@@ -179,7 +180,19 @@ const Home = () => {
   
     fetchData();
   }, []);
-  
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const params = new URLSearchParams(window.location.search);
+    params.set('search', query);
+    if(!!query){
+      window.location.href = `${window.location.pathname}?${params}`;
+    } else{
+      window.location.href = `${window.location.pathname}`;
+    }
+  };
+
   return (
     <div className="md:h-[90vh] sm:h-[100vh] flex justify-center items-center flex-1 z-0 p-5">
       <div className="md:h-auto sm:h-[100vh] grid lg:grid-cols-2 grid-cols-1 gap-4 bg-white rounded-lg sm:rounded-2xl py-14 px-6">
@@ -236,6 +249,16 @@ const Home = () => {
           )}
         </div>
         <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
+          <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
+            <input
+              type="text"
+              placeholder="Digite sua pesquisa..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className={`py-2 px-4 mx-2 rounded-lg border border-gray-400 text-black font-semibold text-xs`}
+            />
+            <button type="submit" className={`bg-blue-600 py-2 px-4 rounded-lg text-white font-semibold text-xs`}>Pesquisar</button>
+          </form>
           <div className="min-w-full min-h-10 flex justify-center items-center gap-4 p-2">
             <button
               className={`${0 === activeTabIndex ? "bg-blue-600" : "bg-blue-500"} py-2 px-4 rounded-lg text-white font-semibold text-xs`}
