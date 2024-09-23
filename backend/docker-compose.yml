@@ -9,6 +9,8 @@ services:
       - ./:/var/www/html
     networks:
       - network_api
+    depends_on:
+      - db
 
   nginx:
     image: nginx:alpine
