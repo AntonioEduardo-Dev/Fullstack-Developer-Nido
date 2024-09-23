@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AuthLoginRequest;
-use App\Http\Requests\AuthRegisterRequest;
+use App\Http\Requests\{
+    AuthLoginRequest,
+    AuthRegisterRequest
+};
 use App\Services\Api\AuthService;
 use Illuminate\Support\Facades\Log;
 

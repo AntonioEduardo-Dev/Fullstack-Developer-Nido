@@ -2,8 +2,10 @@
 
 namespace App\Services\Api;
 
-use App\Repositories\Api\WordHistoryRepository;
-use App\Repositories\Api\WordRepository;
+use App\Repositories\Api\{
+    WordHistoryRepository,
+    WordRepository
+};
 
 class WordHistoryService
 {

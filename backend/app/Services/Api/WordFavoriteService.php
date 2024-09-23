@@ -2,8 +2,10 @@
 
 namespace App\Services\Api;
 
-use App\Repositories\Api\WordFavorityRepository;
-use App\Repositories\Api\WordRepository;
+use App\Repositories\Api\{
+    WordFavorityRepository,
+    WordRepository
+};
 
 class WordFavoriteService
 {
