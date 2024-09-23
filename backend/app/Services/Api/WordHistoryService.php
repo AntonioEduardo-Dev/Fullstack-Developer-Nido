@@ -38,6 +38,10 @@ class WordHistoryService
 
         // Conta todos os documentos na tabela, filtrando se necessário
         $totalDocs = $this->wordHistoryRepository->count(null); 
+        $previous = $items->previousCursor()?->encode();
+        $next = $items->nextCursor()?->encode();
+        $hasNext = $items->hasMorePages();
+        $hasPrev = !is_null($items->previousCursor());
 
         return response()->json([
             'results' => collect($items->items())->map(function($item) {
@@ -47,10 +51,10 @@ class WordHistoryService
                 ]; // Use a propriedade correta se $item for um objeto
             }),
             'totalDocs' => $totalDocs,
-            'previous' => $items->previousCursor()?->encode(),
-            'next' => $items->nextCursor()?->encode(),
-            'hasNext' => $items->hasMorePages(),
-            'hasPrev' => !is_null($items->previousCursor())
+            'previous' => $previous,
+            'next' => $next,
+            'hasNext' => $hasNext,
+            'hasPrev' => $hasPrev,
         ], 200);
     }
 }

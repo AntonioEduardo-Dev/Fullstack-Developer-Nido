@@ -26,17 +26,21 @@ class WordService
         
         // Conta todos os documentos na tabela, filtrando se necessário
         $totalDocs = $this->wordRepository->count($search); 
-    
+        $previous = $items->previousCursor()?->encode();
+        $next = $items->nextCursor()?->encode();
+        $hasNext = $items->hasMorePages();
+        $hasPrev = !is_null($items->previousCursor());
+        
         // Cria a estrutura de resposta
         return [
             'results' => collect($items->items())->map(function($item) {
                 return $item->word; // Use a propriedade correta se $item for um objeto
             }),
             'totalDocs' => $totalDocs,
-            'previous' => $items->previousCursor()?->encode(),
-            'next' => $items->nextCursor()?->encode(),
-            'hasNext' => $items->hasMorePages(),
-            'hasPrev' => !is_null($items->previousCursor()),
+            'previous' => $previous,
+            'next' => $next,
+            'hasNext' => $hasNext,
+            'hasPrev' => $hasPrev,
         ];
     }
 }
