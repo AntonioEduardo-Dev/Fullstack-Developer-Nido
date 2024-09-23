@@ -3,6 +3,7 @@
 namespace App\Services\Api;
 
 use App\Repositories\Api\WordRepository;
+use Illuminate\Support\Facades\Http;
 
 class WordService
 {
@@ -17,6 +18,20 @@ class WordService
                  $this->wordRepository->saveInBatch(['word' => $word]);
             }
         }
+    }
+
+    public function importChunkWords($url)
+    {
+        // Baixar o arquivo
+        $response = Http::get($url);
+        
+        if ($response->successful()) {
+            $words = explode("\n", trim($response->body()));
+            $this->wordRepository->insertChunkWords($words);
+            return count($words);
+        }
+
+        throw new \Exception("Erro ao baixar o arquivo.");
     }
 
     public function listData($perPage, $cursor, $search) 
