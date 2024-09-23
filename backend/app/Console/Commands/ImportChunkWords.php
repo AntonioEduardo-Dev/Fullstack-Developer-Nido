@@ -19,6 +19,7 @@ class ImportChunkWords extends Command
     {
         try {
             $url = $this->argument('url');
+            $this->info('Aguarde...');
             $this->wordService->importChunkWords($url);
             $this->info('Palavras importadas com sucesso!');
         } catch (\Exception $e) {

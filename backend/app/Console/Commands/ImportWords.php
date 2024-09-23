@@ -23,8 +23,7 @@ class ImportWords extends Command
 
         if ($response->successful()) {
             $listWords = explode("\n", $response->body());
-
-            // Usar o service para importar as palavras
+            $this->info('Aguarde...');
             $this->wordService->importWords($listWords);
             $this->info('Palavras importadas com sucesso!');
         } else {
