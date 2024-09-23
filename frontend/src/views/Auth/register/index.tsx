@@ -8,21 +8,21 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import apiUtils from "../../../utils/apiUtils";
 import api from "../../../services/api";
+import { AxiosError } from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-
+  const [errorMessage, setErrorMessage] = useState<string[]>([]); 
 
   const validateFields = () => {
     if (!name || !email || !password) {
-      setErrorMessage("Por favor, preencha todos os campos.");
+      setErrorMessage(["Por favor, preencha todos os campos."]);
       return false;
     }
-    setErrorMessage('');
+    setErrorMessage([]);
     return true;
   };
 
@@ -37,11 +37,15 @@ const Register = () => {
         api.defaults.headers.common['Authorization'] = response.token;
         navigate("/");
       }
-    } catch (error: any) {
-      const generalMessage = error?.response?.data?.message || "";
-      const fullMessage = `Erro ao tentar realizar o registro. ${generalMessage}`;
-    
-      setErrorMessage(fullMessage);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const { errors } = error.response.data || {};
+        const allErrorsArray = errors ? (Object.values(errors).flat() as string[]) : [];
+
+        setErrorMessage(allErrorsArray);
+      } else {
+        setErrorMessage(["Erro ao tentar criar a conta"]);
+      }
     }
   };
   
@@ -49,7 +53,13 @@ const Register = () => {
     <div className="h-[90vh] flex justify-center items-center flex-1 z-0">
       <div className="md:w-[500px] w-full md:h-auto h-full bg-white flex flex-col md:justify-center justify-start items-center rounded-none md:rounded-2xl py-12 Z-0">
         <span className="font-semibold text-3xl mb-6">Cadastre-se</span>
-        {errorMessage && <p className="error mb-6">{errorMessage}</p>}
+        {errorMessage.length > 0 && (
+          <ul className="error mb-6">
+            {errorMessage.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        )}
         <Input
           id="name"
           placeholder="Digite seu nome"
