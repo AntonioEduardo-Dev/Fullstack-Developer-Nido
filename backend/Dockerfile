@@ -26,3 +26,5 @@ COPY . .
 
 # Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+EXPOSE 9000

@@ -11,29 +11,19 @@ services:
       - network_api
     depends_on:
       - db
-
-  nginx:
-    image: nginx:alpine
-    container_name: backend_web
-    volumes:
-      - ./:/var/www/html
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    entrypoint: sh ./.docker/entrypoint.sh
     ports:
-      - "8080:80"
-    depends_on:
-      - app
-    networks:
-      - network_api
+      - "9000:9000"
 
   db:
     image: mysql:5.7
     container_name: mysql_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: userpass123
+      MYSQL_PASSWORD: userpass123
+      MYSQL_USER: root-docker
     volumes:
       - dbdata:/docker-entrypoint-initdb.d
     networks:
