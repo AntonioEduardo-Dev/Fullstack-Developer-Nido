@@ -27,6 +27,7 @@ const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentCursor, setCurrentCursor] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingWord, setLoadingWord] = useState(false);
   let currentWord = word[currentIndex];
 
   const handleNext = () => {
@@ -108,6 +109,7 @@ const Home = () => {
 
   const selectWord = async (word: string) => {
     if (!!word) {
+      setLoadingWord(true);
       try {
         const response = await apiUtils(`/entries/en/${word}`, 'get', {});
         if (response && response.response) {
@@ -117,6 +119,7 @@ const Home = () => {
       } catch (error) {
         console.log(error);
       }
+      setLoadingWord(false);
     }
   };
 
@@ -226,7 +229,7 @@ const Home = () => {
               </div>
             </>
           ) : (
-            <span className="font-bold text-lg">Não há dados disponíveis</span>
+            <span className="font-bold text-lg">{!!loadingWord ? "Carregando..." : "Não há dados disponíveis" }</span>
           )}
         </div>
         <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
