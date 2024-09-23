@@ -3,16 +3,14 @@ import Input from "../../../components/input";
 import Button from "../../../components/button";
 import { IoMail, IoLockClosed } from "react-icons/io5";
 import { AuthContext } from "../../../context/AuthContext";
-import { useNavigate } from "react-router-dom"; // Importe useNavigate
 import { AxiosError } from "axios";
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string[]>([]); 
-
+  
   const validateFields = () => {
     if (!email || !password) {
       setErrorMessage(["Por favor, preencha todos os campos."]);
@@ -28,10 +26,9 @@ const Login = () => {
     try {
       // Aqui, chama a função de login do contexto, passando os dados
       await login(email, password);
-      
       setTimeout(() => {
-        navigate("/");
-      }, (1 * 1000) );
+        window.location.href = "/";
+      }, (1.5 * 1000) );
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         const errorResponse = error.response;

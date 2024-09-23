@@ -4,14 +4,12 @@ import Button from "../../../components/button";
 import { IoMail } from "react-icons/io5";
 import { IoLockClosed } from "react-icons/io5";
 import { IoPerson } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import apiUtils from "../../../utils/apiUtils";
 import api from "../../../services/api";
 import { AxiosError } from "axios";
 
 const Register = () => {
-  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,9 +33,8 @@ const Register = () => {
       if (response?.token) {
         localStorage.setItem('authToken', response.token);
         api.defaults.headers.common['Authorization'] = response.token;
-
         setTimeout(() => {
-          navigate("/");
+          window.location.href = "/";
         }, (1.5 * 1000) );
       }
     } catch (error) {
