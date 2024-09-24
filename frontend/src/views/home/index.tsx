@@ -49,18 +49,18 @@ const Home = () => {
 
   const loadData = async (endpoint: string, setter: any, post: PostData, load = false) => {
     try {
-      if(!!post.cursor){
+      if (!!post.cursor) {
         setCurrentCursor(post.cursor);
       }
-      if(!!load){
+      if (!!load) {
         post.cursor = "";
       }
       const response = await apiUtils(endpoint, 'get', post);
-      
+
       if (response && response.results) {
-        if(load){
+        if (load) {
           setter(response.results);
-        }else{
+        } else {
           setter((prev: any) => [...prev, ...response.results]);
         }
         return response;
@@ -76,7 +76,7 @@ const Home = () => {
     if (bottom && !loading) {
       let newCursor;
       setLoading(true); // Comece o carregamento
-  
+
       try {
         switch (activeTabIndex) {
           case 0:
@@ -153,21 +153,21 @@ const Home = () => {
 
   const loadTab = async (value: number) => {
     let cursorResponse = null;
-    if(value === 0){
+    if (value === 0) {
       cursorResponse = await loadData('/entries/en', setWords, { limit, search, cursor: cursorWords }, true);
-      if(!!cursorResponse.hasNext){
+      if (!!cursorResponse.hasNext) {
         setCursorWords(cursorResponse.next);
       }
     }
-    if(value === 1){
+    if (value === 1) {
       cursorResponse = await loadData('/user/me/history', setHistory, { limit, search, cursor: cursorHistory }, true);
-      if(!!cursorResponse.hasNext){
+      if (!!cursorResponse.hasNext) {
         setCursorHistory(cursorResponse.next);
       }
     }
-    if(value === 2){
+    if (value === 2) {
       cursorResponse = await loadData('/user/me/favorites', setFavorites, { limit, search, cursor: cursorFavorites }, true);
-      if(!!cursorResponse.hasNext){
+      if (!!cursorResponse.hasNext) {
         setCursorFavorites(cursorResponse.next);
       }
     }
@@ -177,11 +177,11 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       const newCursorWords = await loadData('/entries/en', setWords, { limit, search, cursor: cursorWords }, true);
-      if(!!newCursorWords.hasNext){
+      if (!!newCursorWords.hasNext) {
         setCursorWords(newCursorWords.next);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -190,9 +190,9 @@ const Home = () => {
 
     const params = new URLSearchParams(window.location.search);
     params.set('search', query);
-    if(!!query){
+    if (!!query) {
       window.location.href = `${window.location.pathname}?${params}`;
-    } else{
+    } else {
       window.location.href = `${window.location.pathname}`;
     }
   };
@@ -206,13 +206,13 @@ const Home = () => {
               <div className="min-w-72 min-h-32 rounded-xl border-2 border-gray-400 flex flex-col justify-center items-center gap-4">
                 <span className="font-bold text-lg">{currentWord.word ?? ""}</span>
                 <span className="font-semibold text-lg">{currentWord.phonetic ?? 'N/A'}</span>
-              </div>              
+              </div>
               {currentWord.phonetics && currentWord.phonetics.length > 0 && (
-                <audio 
+                <audio
                   key={currentWord.phonetics[0]?.audio || currentWord.phonetics[1]?.audio || currentWord.phonetics[2]?.audio || ""}
-                  controls 
+                  controls
                   className="mt-5">
-                  <source                    
+                  <source
                     src={
                       currentWord.phonetics[0]?.audio ||
                       currentWord.phonetics[1]?.audio ||
@@ -245,23 +245,25 @@ const Home = () => {
               </div>
               <div className="min-w-72 flex flex-row justify-center items-center gap-4">
                 {
-                  currentWord && currentWord.word && favorites.length > 0 && favorites.filter(favorite => favorite.word === currentWord.word) ? (
-                    <Button title="Desfavoritar" onClick={unMarkFavorite} />
-                  ) : (
-                    <Button title="Favoritar" onClick={markFavorite} />
-                  )
+                  currentWord && currentWord.word && favorites.length > 0
+                    && favorites.filter(favorite => favorite.word === currentWord.word)
+                    ? (
+                      <Button title="Desfavoritar" onClick={unMarkFavorite} />
+                    ) : (
+                      <Button title="Favoritar" onClick={markFavorite} />
+                    )
                 }
               </div>
             </>
           ) : (
-            <span className="font-bold text-lg">{!!loadingWord ? "Carregando..." : "Não há dados disponíveis" }</span>
+            <span className="font-bold text-lg">{!!loadingWord ? "Carregando..." : "Não há dados disponíveis"}</span>
           )}
         </div>
         <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
           <div className="max-w-2xl grid-cols-1 gap-4 px-5 mx-20 my-5 p-6 bg-gray-100 rounded-xl shadow-lg">
             <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
               <div className="mb-4 relative">
-                <button type="submit" 
+                <button type="submit"
                   className="text-white w-25 bg-indigo-400 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full px-10 py-2 mr-3 my-3">
                   Pesquisar
                 </button>
@@ -278,12 +280,11 @@ const Home = () => {
               {tabs.map((tab, index) => (
                 <button
                   key={tab}
-                  className={`px-4 py-2 rounded-t-lg font-medium transition-colors duration-200 ${
-                    activeTab === tab
+                  className={`px-4 py-2 rounded-t-lg font-medium transition-colors duration-200 ${activeTab === tab
                       ? "bg-purple-100 text-purple-800"
                       : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                  }`}
-                  onClick={() => {setActiveTab(tab), loadTab(index)}}
+                    }`}
+                  onClick={() => { setActiveTab(tab), loadTab(index) }}
                 >
                   {tab}
                 </button>
@@ -291,17 +292,16 @@ const Home = () => {
             </div>
             <div className="bg-purple-100 p-6 rounded-lg shadow-inner">
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 min-w-20"
-              style={{ maxHeight: '200px', overflowY: 'auto' }}
-              onScroll={handleScroll}>
+                style={{ maxHeight: '200px', overflowY: 'auto' }}
+                onScroll={handleScroll}>
                 {activeTab === "Wordlist" && words.map((word, index) => (
                   <button
                     key={index}
-                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
-                      selectedWord === word
+                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${selectedWord === word
                         ? "bg-purple-500 text-white shadow-md transform scale-105"
                         : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
-                    }`}
-                    onClick={() => {setSelectedWord(word), selectWord(word)}}
+                      }`}
+                    onClick={() => { setSelectedWord(word), selectWord(word) }}
                   >
                     {word}
                   </button>
@@ -309,12 +309,11 @@ const Home = () => {
                 {activeTab === "History" && history.map((element: any, index) => (
                   <button
                     key={index}
-                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
-                      selectedWord === element.word
+                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${selectedWord === element.word
                         ? "bg-purple-500 text-white shadow-md transform scale-105"
                         : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
-                    }`}
-                    onClick={() => {setSelectedWord(element.word), selectWord(element.word)}}
+                      }`}
+                    onClick={() => { setSelectedWord(element.word), selectWord(element.word) }}
                   >
                     {element.word}
                   </button>
@@ -322,12 +321,11 @@ const Home = () => {
                 {activeTab === "Favorites" && favorites.map((element: any, index) => (
                   <button
                     key={index}
-                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
-                      selectedWord === element.word
+                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${selectedWord === element.word
                         ? "bg-purple-500 text-white shadow-md transform scale-105"
                         : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
-                    }`}
-                    onClick={() => {setSelectedWord(element.word), selectWord(element.word)}}
+                      }`}
+                    onClick={() => { setSelectedWord(element.word), selectWord(element.word) }}
                   >
                     {element.word}
                   </button>
