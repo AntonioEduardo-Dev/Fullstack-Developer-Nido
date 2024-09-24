@@ -18,12 +18,12 @@ const Home = () => {
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [word, setWord] = useState<Word[]>([]);
-  const [words, setWords] = useState([]); // Estado para armazenar palavras
-  const [history, setHistory] = useState([]); // Estado para armazenar histórico
-  const [favorites, setFavorites] = useState([]); // Estado para armazenar favoritos
-  const [cursorWords, setCursorWords] = useState(""); // Cursor para palavras
-  const [cursorHistory, setCursorHistory] = useState(""); // Cursor para histórico
-  const [cursorFavorites, setCursorFavorites] = useState(""); // Cursor para favoritos
+  const [words, setWords] = useState([]);
+  const [history, setHistory] = useState<Word[]>([]);
+  const [favorites, setFavorites] = useState<Word[]>([]);
+  const [cursorWords, setCursorWords] = useState("");
+  const [cursorHistory, setCursorHistory] = useState("");
+  const [cursorFavorites, setCursorFavorites] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentCursor, setCurrentCursor] = useState("");
   const [loading, setLoading] = useState(false);
@@ -224,11 +224,11 @@ const Home = () => {
               )}
               <div className="max-w-72 min-w-72 min-h-20 max-h-48 mb-6 overflow-y-auto">
                 <span className="p-4">
-                  {currentWord.meanings.map((meaning: any, index: string) => (
+                  {currentWord.meanings.map((meaning, index) => (
                     <div key={index}>
                       <strong>{meaning.partOfSpeech}</strong>
                       <ul>
-                        {meaning.definitions.map((definition: any, defIndex: string) => (
+                        {meaning.definitions.map((definition, defIndex) => (
                           <li key={defIndex}>
                             {definition.definition}
                             {definition.example && <em> (Ex: {definition.example})</em>}
@@ -244,8 +244,13 @@ const Home = () => {
                 <Button title="Próximo >>" onClick={handleNext} disabled={currentIndex === word.length - 1} />
               </div>
               <div className="min-w-72 flex flex-row justify-center items-center gap-4">
-                <Button title="Favoritar" onClick={markFavorite} />
-                <Button title="Desfavoritar" onClick={unMarkFavorite} />
+                {
+                  currentWord && currentWord.word && favorites.length > 0 && favorites.filter(favorite => favorite.word === currentWord.word) ? (
+                    <Button title="Desfavoritar" onClick={unMarkFavorite} />
+                  ) : (
+                    <Button title="Favoritar" onClick={markFavorite} />
+                  )
+                }
               </div>
             </>
           ) : (
