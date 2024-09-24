@@ -3,7 +3,6 @@ import Button from "../../components/button";
 import apiUtils from "../../utils/apiUtils";
 import { useLocation } from "react-router-dom";
 import { Word } from "../../interface/WordInterface";
-import { IoSearchCircleOutline } from "react-icons/io5";
 
 interface PostData {
   limit?: string;
