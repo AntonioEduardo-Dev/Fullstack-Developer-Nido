@@ -3,6 +3,7 @@ import Button from "../../components/button";
 import apiUtils from "../../utils/apiUtils";
 import { useLocation } from "react-router-dom";
 import { Word } from "../../interface/WordInterface";
+import { IoSearchCircleOutline } from "react-icons/io5";
 
 interface PostData {
   limit?: string;
@@ -30,6 +31,10 @@ const Home = () => {
   const [loadingWord, setLoadingWord] = useState(false);
   let currentWord = word[currentIndex];
   const [query, setQuery] = useState('');
+  const [activeTab, setActiveTab] = useState("Wordlist");
+  const [selectedWord, setSelectedWord] = useState("")
+
+  const tabs = ["Wordlist", "History", "Favorites"]
 
   const handleNext = () => {
     if (currentIndex < word.length - 1) {
@@ -194,8 +199,8 @@ const Home = () => {
   };
 
   return (
-    <div className="md:h-[90vh] sm:h-[100vh] flex justify-center items-center flex-1 z-0 p-5">
-      <div className="md:h-auto sm:h-[100vh] grid lg:grid-cols-2 grid-cols-1 gap-4 bg-white rounded-lg sm:rounded-2xl py-14 px-6">
+    <div className="md:h-[90vh] sm:h-[100vh] flex justify-center items-center flex-1 z-0 py-5">
+      <div className="md:h-auto sm:h-[100vh] grid lg:grid-cols-2 grid-cols-1 gap-4 bg-white rounded-lg sm:rounded-2xl py-14 px-2">
         <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
           {currentWord ? (
             <>
@@ -249,77 +254,81 @@ const Home = () => {
           )}
         </div>
         <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
-          <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
-            <button type="submit" className="bg-indigo-400 py-2 px-4 rounded-l-lg text-white font-semibold text-xs">
-              Pesquisar
-            </button>
-            <div className="flex items-center border border-gray-400 rounded-r-lg">
-              <input
-                type="text"
-                placeholder="Digite sua pesquisa..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="py-2 px-4 rounded-r-lg text-black font-semibold text-xs focus:outline-none"
-              />
-            </div>
-          </form>
-
-          <div className="min-w-full min-h-10 flex justify-center items-center gap-4 p-2">
-            <button
-              className={`${0 === activeTabIndex ? "bg-indigo-800" : "bg-indigo-400"} py-2 px-4 rounded-lg text-white font-semibold text-xs`}
-              onClick={() => loadTab(0)}>
-              Word list
-            </button>
-            <button
-              className={`${1 === activeTabIndex ? "bg-indigo-800" : "bg-indigo-400"} py-2 px-4 rounded-lg text-white font-semibold text-xs`}
-              onClick={() => loadTab(1)}>
-              History
-            </button>
-            <button
-              className={`${2 === activeTabIndex ? "bg-indigo-800" : "bg-indigo-400"} py-2 px-4 rounded-lg text-white font-semibold text-xs`}
-              onClick={() => loadTab(2)}>
-              Favorites
-            </button>
-          </div>
-          <div data-tab-content="">
-            <div id="words"
-              className={`md:w-96 w-full h-full border-2 mt-6 p-4 rounded-lg border-gray-400 grid grid-cols-4 gap-1 
-              ${0 === activeTabIndex ? '' : 'hidden'}`}
-              style={{ maxHeight: '200px', overflowY: 'auto' }}
-              onScroll={handleScroll}>
-              {words.map((word, index) => (
-                <span key={index} className="w-13 h-10 py-2 px-1 border-[1px] border-b-2 rounded-md border-gray-400 
-                  flex justify-center items-center cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
-                  onClick={() => selectWord(word)}>
-                  {word}
-                </span>
+          <div className="max-w-2xl grid-cols-1 gap-4 px-5 mx-20 my-5 p-6 bg-gray-100 rounded-xl shadow-lg">
+            <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="mb-4 relative">
+                <button type="submit" 
+                  className="text-white w-25 bg-indigo-400 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full px-10 py-2 mr-3 my-3">
+                  Pesquisar
+                </button>
+                <input
+                  type="text"
+                  placeholder="Digite sua pesquisa..."
+                  className="w-80 pl-10 pr-4 py-2 rounded-full border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+            </form>
+            <div className="flex space-x-1 mb-4">
+              {tabs.map((tab, index) => (
+                <button
+                  key={tab}
+                  className={`px-4 py-2 rounded-t-lg font-medium transition-colors duration-200 ${
+                    activeTab === tab
+                      ? "bg-purple-100 text-purple-800"
+                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                  }`}
+                  onClick={() => {setActiveTab(tab), loadTab(index)}}
+                >
+                  {tab}
+                </button>
               ))}
             </div>
-            <div id="history"
-              className={`md:w-96 w-full h-full border-2 mt-6 p-4 rounded-lg border-gray-400 grid grid-cols-4 gap-1 
-              ${1 === activeTabIndex ? '' : 'hidden'}`}
+            <div className="bg-purple-100 p-6 rounded-lg shadow-inner">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 min-w-20"
               style={{ maxHeight: '200px', overflowY: 'auto' }}
               onScroll={handleScroll}>
-              {history.map((element: any, index) => (
-                <span key={index} className="w-13 h-10 py-2 px-1 border-[1px] border-b-2 rounded-md border-gray-400 
-                  flex justify-center items-center cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
-                  onClick={() => selectWord(element.word)}>
-                  {element.word}
-                </span>
-              ))}
-            </div>
-            <div id="favorites"
-              className={`md:w-96 w-full h-full border-2 mt-6 p-4 rounded-lg border-gray-400 grid grid-cols-4 gap-1 
-              ${2 === activeTabIndex ? '' : 'hidden'}`}
-              style={{ maxHeight: '200px', overflowY: 'auto' }}
-              onScroll={handleScroll}>
-              {favorites.map((element: any, index) => (
-                <span key={index} className="w-13 h-10 py-2 px-1 border-[1px] border-b-2 rounded-md border-gray-400 
-                  flex justify-center items-center cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
-                  onClick={() => selectWord(element.word)}>
-                  {element.word}
-                </span>
-              ))}
+                {activeTab === "Wordlist" && words.map((word, index) => (
+                  <button
+                    key={index}
+                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
+                      selectedWord === word
+                        ? "bg-purple-500 text-white shadow-md transform scale-105"
+                        : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
+                    }`}
+                    onClick={() => {setSelectedWord(word), selectWord(word)}}
+                  >
+                    {word}
+                  </button>
+                ))}
+                {activeTab === "History" && history.map((element: any, index) => (
+                  <button
+                    key={index}
+                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
+                      selectedWord === element.word
+                        ? "bg-purple-500 text-white shadow-md transform scale-105"
+                        : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
+                    }`}
+                    onClick={() => {setSelectedWord(element.word), selectWord(element.word)}}
+                  >
+                    {element.word}
+                  </button>
+                ))}
+                {activeTab === "Favorites" && favorites.map((element: any, index) => (
+                  <button
+                    key={index}
+                    className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
+                      selectedWord === element.word
+                        ? "bg-purple-500 text-white shadow-md transform scale-105"
+                        : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
+                    }`}
+                    onClick={() => {setSelectedWord(element.word), selectWord(element.word)}}
+                  >
+                    {element.word}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
