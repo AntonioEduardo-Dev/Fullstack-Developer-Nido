@@ -199,31 +199,31 @@ const Home = () => {
 
   return (
     <div className="md:h-[90vh] sm:h-[100vh] flex justify-center items-center flex-1 z-0 py-5">
-      <div className="md:h-auto sm:h-[100vh] grid lg:grid-cols-2 grid-cols-1 gap-4 bg-white rounded-lg sm:rounded-2xl py-14 px-2">
+      <div className="md:h-auto sm:h-[100vh] grid lg:grid-cols-2 grid-cols-1 gap-4 bg-white rounded-lg sm:rounded-2xl py-14 px-1">
         <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
           {currentWord ? (
             <>
-              <div className="min-w-72 min-h-32 rounded-xl border-2 border-gray-400 flex flex-col justify-center items-center gap-4">
+              <div className="min-w-72 max-w-72 min-h-32 rounded-xl border-2 border-gray-400 flex flex-col justify-center items-center gap-4">
                 <span className="font-bold text-lg">{currentWord.word ?? ""}</span>
                 <span className="font-semibold text-lg">{currentWord.phonetic ?? 'N/A'}</span>
               </div>
-              {currentWord.phonetics && currentWord.phonetics.length > 0 && (
-                <audio
-                  key={currentWord.phonetics[0]?.audio || currentWord.phonetics[1]?.audio || currentWord.phonetics[2]?.audio || ""}
-                  controls
-                  className="mt-5">
-                  <source
-                    src={
-                      currentWord.phonetics[0]?.audio ||
-                      currentWord.phonetics[1]?.audio ||
-                      currentWord.phonetics[2]?.audio ||
-                      ""
-                    }
-                    type="audio/mpeg" />
-                </audio>
-              )}
-              <div className="max-w-72 min-w-72 min-h-20 max-h-48 mb-6 overflow-y-auto">
-                <span className="p-4">
+              <div className="max-w-72 min-w-72 min-h-72 max-h-72 mb-6 overflow-y-auto overflow-x-hidden">
+                {currentWord.phonetics && currentWord.phonetics.length > 0 && (
+                  <audio
+                    key={currentWord.phonetics[0]?.audio || currentWord.phonetics[1]?.audio || currentWord.phonetics[2]?.audio || ""}
+                    controls
+                    className="mt-5 w-full">
+                    <source
+                      src={
+                        currentWord.phonetics[0]?.audio ||
+                        currentWord.phonetics[1]?.audio ||
+                        currentWord.phonetics[2]?.audio ||
+                        ""
+                      }
+                      type="audio/mpeg" />
+                  </audio>
+                )}
+                <span className="p-4 w-full">
                   {currentWord.meanings.map((meaning, index) => (
                     <div key={index}>
                       <strong>{meaning.partOfSpeech}</strong>
@@ -281,8 +281,8 @@ const Home = () => {
                 <button
                   key={tab}
                   className={`px-4 py-2 rounded-t-lg font-medium transition-colors duration-200 ${activeTab === tab
-                      ? "bg-purple-100 text-purple-800"
-                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                    ? "bg-purple-100 text-purple-800"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                     }`}
                   onClick={() => { setActiveTab(tab), loadTab(index) }}
                 >
@@ -298,8 +298,8 @@ const Home = () => {
                   <button
                     key={index}
                     className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${selectedWord === word
-                        ? "bg-purple-500 text-white shadow-md transform scale-105"
-                        : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
+                      ? "bg-purple-500 text-white shadow-md transform scale-105"
+                      : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
                       }`}
                     onClick={() => { setSelectedWord(word), selectWord(word) }}
                   >
@@ -310,8 +310,8 @@ const Home = () => {
                   <button
                     key={index}
                     className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${selectedWord === element.word
-                        ? "bg-purple-500 text-white shadow-md transform scale-105"
-                        : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
+                      ? "bg-purple-500 text-white shadow-md transform scale-105"
+                      : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
                       }`}
                     onClick={() => { setSelectedWord(element.word), selectWord(element.word) }}
                   >
@@ -322,8 +322,8 @@ const Home = () => {
                   <button
                     key={index}
                     className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${selectedWord === element.word
-                        ? "bg-purple-500 text-white shadow-md transform scale-105"
-                        : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
+                      ? "bg-purple-500 text-white shadow-md transform scale-105"
+                      : "bg-white text-purple-800 hover:bg-purple-200 hover:shadow-md"
                       }`}
                     onClick={() => { setSelectedWord(element.word), selectWord(element.word) }}
                   >
