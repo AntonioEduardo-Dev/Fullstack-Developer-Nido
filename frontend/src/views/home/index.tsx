@@ -200,7 +200,7 @@ const Home = () => {
   return (
     <div className="md:h-[90vh] sm:h-[100vh] flex justify-center items-center flex-1 z-0 py-5">
       <div className="md:h-auto sm:h-[100vh] grid lg:grid-cols-2 grid-cols-1 gap-4 bg-white rounded-lg sm:rounded-2xl py-14 px-1">
-        <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
+        <div className="w-full md:columns-6 columns-12 flex flex-col items-center justify-start">
           {currentWord ? (
             <>
               <div className="min-w-72 max-w-72 min-h-32 rounded-xl border-2 border-gray-400 flex flex-col justify-center items-center gap-4">
@@ -259,9 +259,9 @@ const Home = () => {
             <span className="font-bold text-lg">{!!loadingWord ? "Carregando..." : "Não há dados disponíveis"}</span>
           )}
         </div>
-        <div className="md:columns-6 columns-12 flex flex-col items-center justify-start">
-          <div className="max-w-2xl grid-cols-1 gap-4 px-5 mx-20 my-5 p-6 bg-gray-100 rounded-xl shadow-lg">
-            <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="md:columns-6 columns-12 flex flex-col items-center justify-start min-w-xl max-w-2xl">
+          <div className="w-full grid-cols-1 gap-4 px-5 mx-20 my-5 p-6 bg-gray-100 rounded-xl shadow-lg">
+            <form className="w-full" onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
               <div className="mb-4 relative">
                 <button type="submit"
                   className="text-white w-25 bg-indigo-400 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full px-10 py-2 mr-3 my-3">
@@ -276,7 +276,7 @@ const Home = () => {
                 />
               </div>
             </form>
-            <div className="flex space-x-1 mb-4">
+            <div className="w-full flex space-x-1 mb-4">
               {tabs.map((tab, index) => (
                 <button
                   key={tab}
