@@ -9,6 +9,8 @@ class WordFavoriteTableSeeder extends Seeder
 {
     public function run()
     {
+        return true;
+        
         // Limpa os registros existentes na tabela antes de inserir os novos
         WordFavorite::truncate();
         WordFavorite::create([
