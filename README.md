@@ -41,7 +41,7 @@ Este projeto é uma aplicação fullstack desenvolvida como parte de um desafio 
 
    ```bash
    cd backend
-   docker-compose up
+   docker-compose up --build
    docker-compose up -d (opcional) (para iniciar oculto no terminal)
    ```
 
@@ -49,7 +49,7 @@ Este projeto é uma aplicação fullstack desenvolvida como parte de um desafio 
 
    ```bash
    cd frontend
-   docker-compose up
+   docker-compose up --build
    docker-compose up -d (opcional)
    ```
 
